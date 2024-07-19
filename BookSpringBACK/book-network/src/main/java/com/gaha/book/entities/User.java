@@ -13,6 +13,9 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import com.gaha.book.entities.book.Book;
+import com.gaha.book.entities.book.BookTransactionHistory;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
@@ -49,7 +52,7 @@ public class User implements UserDetails, Principal {
 	@ManyToMany(fetch = FetchType.EAGER)
 	private List<Role> roles;
 
-	@OneToMany(mappedBy = "owner")
+	@OneToMany(mappedBy = "owner", fetch = FetchType.EAGER)
 	private List<Book> books;
 
 	@OneToMany(mappedBy = "user")

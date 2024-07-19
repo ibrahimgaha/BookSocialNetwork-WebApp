@@ -1,6 +1,7 @@
-package com.gaha.book.entities;
+package com.gaha.book.entities.book;
 
 import com.gaha.book.common.BaseEntity;
+import com.gaha.book.entities.User;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;

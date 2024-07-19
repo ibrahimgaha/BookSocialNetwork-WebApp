@@ -11,7 +11,7 @@ import com.gaha.book.entities.Role;
 import com.gaha.book.repositories.RoleRepository;
 
 @SpringBootApplication(scanBasePackages = "com.gaha.book")
-@EnableJpaAuditing
+@EnableJpaAuditing(auditorAwareRef = "auditorAware")
 @EnableAsync
 public class BookNetworkApiApplication {
 
