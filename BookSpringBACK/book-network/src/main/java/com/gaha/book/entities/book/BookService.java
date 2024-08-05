@@ -112,6 +112,7 @@ public class BookService {
 		return bookId;
 	}
 
+	// updateArchivedStatus
 	public Integer updateArchivedStatus(Integer bookId, Authentication connectedUser) {
 		Book book = bookRepository.findById(bookId)
 				.orElseThrow(() -> new EntityNotFoundException("No book found with the id " + bookId));
@@ -126,6 +127,54 @@ public class BookService {
 		bookRepository.save(book);
 
 		return bookId;
+	}
+
+	// borrowBook
+
+	public Integer borrowBook(Integer bookId, Authentication connectedUser) {
+		Book book = bookRepository.findById(bookId).orElseThrow(() -> new EntityNotFoundException("Book Not Found ! "));
+		if (book.isArchived() || !book.isShareable()) {
+			throw new OperationNotPermittedException("The requested book can not be borrowed ! ");
+		}
+		User user = ((User) connectedUser.getPrincipal());
+
+		if (java.util.Objects.equals(book.getOwner().getId(), user.getId())) {
+			// throw exception
+			throw new OperationNotPermittedException("You cannot borrow your own book");
+		}
+
+		final boolean isAltreadyBorrowed = bookTransactionHistoryRepository.isAlreadyBorrowedByUser(bookId,
+				user.getId());
+
+		if (isAltreadyBorrowed) {
+			throw new OperationNotPermittedException("the requested book is already borrowed ");
+
+		}
+		BookTransactionHistory bookTransactionHistory = BookTransactionHistory.builder().user(user).book(book)
+				.returnApproved(false).build();
+		return bookTransactionHistoryRepository.save(bookTransactionHistory).getId();
+	}
+
+	// returnBorrowedBook
+
+	public Integer returnBorrowedBook(Integer bookId, Authentication connectedUser) {
+
+		Book book = bookRepository.findById(bookId)
+				.orElseThrow(() -> new EntityNotFoundException("No book found with the id " + bookId));
+
+		if (book.isArchived() || !book.isShareable()) {
+			throw new OperationNotPermittedException("The requested book can not be borrowed ! ");
+		}
+		User user = ((User) connectedUser.getPrincipal());
+		if (java.util.Objects.equals(book.getOwner().getId(), user.getId())) {
+			// throw exception
+			throw new OperationNotPermittedException("You cannot return or borrow your own book");
+		}
+		BookTransactionHistory bookTransactionHistory = bookTransactionHistoryRepository
+				.findByBookIdAndUserId(bookId, user.getId())
+				.orElseThrow(() -> new OperationNotPermittedException("you did not borrow this book "));
+		bookTransactionHistory.setReturned(true);
+		return bookTransactionHistoryRepository.save(bookTransactionHistory).getId();
 	}
 
 }
