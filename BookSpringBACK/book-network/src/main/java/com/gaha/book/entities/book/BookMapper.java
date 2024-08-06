@@ -1,11 +1,15 @@
 package com.gaha.book.entities.book;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import jakarta.validation.Valid;
 
 @Service
 public class BookMapper {
+
+	@Autowired
+	private com.gaha.book.entities.book.file.FileUtils fileUtils;
 
 	public Book toBook(@Valid BookRequest request) {
 
@@ -17,7 +21,7 @@ public class BookMapper {
 		return BookResponse.builder().id(book.getId()).title(book.getTitle()).authorName(book.getAuthorName())
 				.synopsis(book.getSynopsis()).rate(book.getRate()).archived(book.isArchived())
 				.shareable(book.isShareable()).owner(book.getOwner().fullName())
-				// .cover(null)
+				.cover(fileUtils.readFileFromLocation(book.getBookCover()))
 
 				.build();
 	}

@@ -9,14 +9,18 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.core.Authentication;
+import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.gaha.book.common.PageResponse;
 import com.gaha.book.entities.User;
+import com.gaha.book.entities.book.file.FileStorageService;
 import com.gaha.book.entities.exception.OperationNotPermittedException;
 
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 
+@Service
 public class BookService {
 
 	@Autowired
@@ -27,6 +31,9 @@ public class BookService {
 
 	@Autowired
 	private BookTransactionHistoryRepository bookTransactionHistoryRepository;
+
+	@Autowired
+	private FileStorageService fileStorageService;
 
 	// save a book
 	public Integer save(@Valid BookRequest request, Authentication connectedUser) {
@@ -175,6 +182,40 @@ public class BookService {
 				.orElseThrow(() -> new OperationNotPermittedException("you did not borrow this book "));
 		bookTransactionHistory.setReturned(true);
 		return bookTransactionHistoryRepository.save(bookTransactionHistory).getId();
+	}
+
+	// approveReturnBorrowedBook
+	public Integer approveReturnBorrowedBook(Integer bookId, Authentication connectedUser) {
+
+		Book book = bookRepository.findById(bookId)
+				.orElseThrow(() -> new EntityNotFoundException("No book found with the id " + bookId));
+
+		if (book.isArchived() || !book.isShareable()) {
+			throw new OperationNotPermittedException("The requested book can not be borrowed ! ");
+		}
+		User user = ((User) connectedUser.getPrincipal());
+		if (java.util.Objects.equals(book.getOwner().getId(), user.getId())) {
+			// throw exception
+			throw new OperationNotPermittedException("You cannot return or borrow your own book");
+		}
+
+		BookTransactionHistory bookTransactionHistory = bookTransactionHistoryRepository
+				.findByBookIdAndOwnerId(bookId, user.getId())
+				.orElseThrow(() -> new OperationNotPermittedException("The book is not reuturned yet ! "));
+		bookTransactionHistory.setReturnApproved(true);
+		return bookTransactionHistoryRepository.save(bookTransactionHistory).getId();
+	}
+
+	public void updateBookCoverPicture(MultipartFile file, Authentication connectedUser, Integer bookId) {
+		Book book = bookRepository.findById(bookId)
+				.orElseThrow(() -> new EntityNotFoundException("No book found with the id " + bookId));
+
+		User user = ((User) connectedUser.getPrincipal());
+
+		String bookCover = fileStorageService.saveFile(file, user.getId());
+		book.setBookCover(bookCover);
+		bookRepository.save(book);
+
 	}
 
 }
