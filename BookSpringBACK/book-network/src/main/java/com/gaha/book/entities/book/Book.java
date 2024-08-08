@@ -3,8 +3,8 @@ package com.gaha.book.entities.book;
 import java.util.List;
 
 import com.gaha.book.common.BaseEntity;
-import com.gaha.book.entities.FeedBack;
 import com.gaha.book.entities.User;
+import com.gaha.book.entities.FeedBack.FeedBack;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;

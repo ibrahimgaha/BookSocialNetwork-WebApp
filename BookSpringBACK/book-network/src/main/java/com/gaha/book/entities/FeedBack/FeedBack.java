@@ -1,4 +1,4 @@
-package com.gaha.book.entities;
+package com.gaha.book.entities.FeedBack;
 
 import com.gaha.book.common.BaseEntity;
 import com.gaha.book.entities.book.Book;
