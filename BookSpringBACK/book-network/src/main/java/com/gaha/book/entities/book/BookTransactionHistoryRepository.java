@@ -12,25 +12,24 @@ import org.springframework.stereotype.Repository;
 public interface BookTransactionHistoryRepository extends JpaRepository<BookTransactionHistory, Integer> {
 
 	@Query("""
-			SELECT history
+			SELECT h
 			FROM BookTransactionHistory h
-			WHERE h.user.id = : userId
+			WHERE h.user.id = :userId
 			""")
 	Page<BookTransactionHistory> findAllBorrowedBooks(Pageable pageable, Integer userId);
 
 	@Query("""
-			SELECT history
+			SELECT h
 			FROM BookTransactionHistory h
-			WHERE h.book.owner.id = : userId
+			WHERE h.book.owner.id = :userId
 			""")
 	Page<BookTransactionHistory> findAllReturnedBooks(Pageable pageable, Integer userId);
 
 	@Query("""
-			SELECT
-			(COUNT(*) > 0) AS isBorrowed
+			SELECT (COUNT(b) > 0)
 			FROM BookTransactionHistory b
-			WHERE b.user.id =: userId
-			AND b.book.id =: bookId
+			WHERE b.user.id = :userId
+			AND b.book.id = :bookId
 			AND b.returnApproved = false
 			""")
 	boolean isAlreadyBorrowedByUser(Integer bookId, Integer userId);
@@ -38,8 +37,8 @@ public interface BookTransactionHistoryRepository extends JpaRepository<BookTran
 	@Query("""
 			SELECT transaction
 			FROM BookTransactionHistory transaction
-			WHERE transaction.user.id =: userId
-			AND transaction.book.id =: bookId
+			WHERE transaction.user.id = :userId
+			AND transaction.book.id = :bookId
 			AND transaction.returned = false
 			AND transaction.returnApproved = false
 			""")
@@ -47,9 +46,9 @@ public interface BookTransactionHistoryRepository extends JpaRepository<BookTran
 
 	@Query("""
 			SELECT transaction
-			FROM BookTransactionHistory transaction
-			WHERE transaction.owner.id =: userId
-			AND transaction.book.id =: bookId
+			FROM BookTransactionHistory  transaction
+			WHERE transaction.book.owner.id = :userId
+			AND transaction.book.id = :bookId
 			AND transaction.returned = true
 			AND transaction.returnApproved = false
 			""")

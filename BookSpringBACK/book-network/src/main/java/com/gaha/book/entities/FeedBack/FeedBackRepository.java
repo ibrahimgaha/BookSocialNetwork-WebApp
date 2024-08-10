@@ -10,10 +10,9 @@ import org.springframework.stereotype.Repository;
 public interface FeedBackRepository extends JpaRepository<FeedBack, Integer> {
 
 	@Query("""
-			SELECT feedBack
-			From FeedBack f
-			WHERE f.book.id = : bookId
+			SELECT f
+			FROM FeedBack f
+			WHERE f.book.id = :bookId
 			""")
-	Page<FeedBack> findAllByBookId(Integer bookId, Pageable Pageable);
-
+	Page<FeedBack> findAllByBookId(Integer bookId, Pageable pageable); // Use 'pageable' instead of 'Pageable'
 }

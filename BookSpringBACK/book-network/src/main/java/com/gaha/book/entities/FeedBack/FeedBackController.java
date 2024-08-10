@@ -1,6 +1,5 @@
 package com.gaha.book.entities.FeedBack;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,7 +22,6 @@ import lombok.RequiredArgsConstructor;
 @Tag(name = "FeedBack")
 public class FeedBackController {
 
-	@Autowired
 	private final FeedBackService feedBackService;
 
 	@PostMapping("path")
@@ -32,14 +30,11 @@ public class FeedBackController {
 		return ResponseEntity.ok(feedBackService.save(request, connectedUser));
 	}
 
-	@GetMapping("/book/{book-id}")
-	public ResponseEntity<PageResponse<FeedBackResponse>> findAllFeedBacksByBook(
-			@PathVariable("book-id") Integer bookId,
-			@RequestParam(name = "page", defaultValue = "0", required = false) int page,
-			@RequestParam(name = "page", defaultValue = "10", required = false) int size,
-			Authentication connectedUser) {
+	@GetMapping("/book/{bookId}")
+	public ResponseEntity<PageResponse<FeedBackResponse>> findAllFeedBacksByBook(@PathVariable("bookId") Integer bookId,
+			@RequestParam(name = "page", defaultValue = "0") int page,
+			@RequestParam(name = "size", defaultValue = "10") int size, Authentication connectedUser) {
 
 		return ResponseEntity.ok(feedBackService.findAllFeedBacksByBook(bookId, page, size, connectedUser));
 	}
-
 }
