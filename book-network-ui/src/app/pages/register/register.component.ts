@@ -9,30 +9,33 @@ import { AuthenticationService } from 'src/app/services/services';
   styleUrls: ['./register.component.css']
 })
 export class RegisterComponent implements OnInit {
-  registerRequest : RegistrationRequest = {email: '',firstname:'',lastname:'', password:''};
-  errorMsg:Array<string> = [];
-  constructor(private router:Router,private authService:AuthenticationService) { }
+  registerRequest: RegistrationRequest = {email: '', firstname: '', lastname: '', password: ''};
+  errorMsg: Array<string> = [];
 
-  ngOnInit(): void {
-  }
+  constructor(private router: Router, private authService: AuthenticationService) {}
 
-  register(){
-    this.errorMsg=[];
+  ngOnInit(): void {}
+
+  register() {
+    this.errorMsg = [];
     this.authService.register({body: this.registerRequest}).subscribe({
-      next:()=>{
+      next: () => {
         this.router.navigate(['/activate-account']);
       },
-      error:(err)=>{
-         this.errorMsg= err.error.validationErrors
-  
+      error: (err) => {
+        // Check if err and validationErrors exist before accessing them
+        if (err && err.error && err.error.validationErrors) {
+          this.errorMsg = err.error.validationErrors;
+        } else {
+          // Handle the case where validationErrors is not available
+          this.errorMsg = ['An unexpected error occurred. Please try again later.'];
+          console.error('Unexpected error structure:', err);
+        }
       }
-    }
-      
-    )
+    });
   }
 
-
   redirectToLogin() {
-this.router.navigate(['/login']);
+    this.router.navigate(['/login']);
   }
 }

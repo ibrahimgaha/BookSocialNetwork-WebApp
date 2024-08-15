@@ -12,6 +12,8 @@ public class BookMapper {
 	private com.gaha.book.entities.book.file.FileUtils fileUtils;
 
 	public Book toBook(@Valid BookRequest request) {
+		// Log the request object for debugging purposes
+		System.out.println("Mapping BookRequest: " + request);
 
 		return Book.builder().id(request.id()).title(request.title()).authorName(request.authorName())
 				.synopsis(request.synopsis()).archived(false).shareable(request.shareable()).build();
