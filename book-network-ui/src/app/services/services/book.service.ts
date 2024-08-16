@@ -131,9 +131,27 @@ export class BookService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  borrowBook$Response(params?: BorrowBook$Params, context?: HttpContext): Observable<StrictHttpResponse<number>> {
-    return borrowBook(this.http, this.rootUrl, params, context);
+  borrowBook$Response(params?: { 'book_id'?: number }, context?: HttpContext): Observable<StrictHttpResponse<number>> {
+    if (!params || params['book_id'] === undefined) {
+      throw new Error('book-id parameter is required');
+    }
+  
+    const url = `${this.rootUrl}/books/borrow/${params['book_id']}`;
+  
+    return this.http.post<number>(url, {}, { observe: 'response', context }).pipe(
+      map(response => {
+        return {
+          body: response.body as number,
+          headers: response.headers,
+          status: response.status,
+          statusText: response.statusText,
+          url: response.url
+        } as StrictHttpResponse<number>;
+      })
+    );
   }
+  
+  
 
   /**
    * This method provides access only to the response body.

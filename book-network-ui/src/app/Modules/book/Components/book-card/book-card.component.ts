@@ -11,7 +11,7 @@ export class BookCardComponent implements OnInit {
   constructor() { }
 
   public _book : BookResponse ={};
-  public _manage : Boolean =false;
+  public _manage: Boolean = false;  // Explicitly set an initial value
   public _bookCover : String | undefined ;
 
   ngOnInit(): void {
@@ -39,8 +39,10 @@ export class BookCardComponent implements OnInit {
   }
 
   set manage(value: Boolean) {
-    this._manage = value;
-  }
+  console.log('Setting manage to:', value);
+  this._manage = value;
+}
+
 
   @Output() private share : EventEmitter<BookResponse> =new EventEmitter <BookResponse>();
   @Output() private addToWaitingList : EventEmitter<BookResponse> =new EventEmitter <BookResponse>();
