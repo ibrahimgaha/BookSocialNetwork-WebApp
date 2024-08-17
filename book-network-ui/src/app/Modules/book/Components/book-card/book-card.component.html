@@ -1,5 +1,5 @@
-<div class="card" style="width:20rem;">
-
+<div class="card border-3" style="width:20rem;" [class.border-success]="book.shareable" [class.border-warning]="book.archived">
+    
     <img height="200" [src]="bookCover" class="card-img-top" alt="...">
     <div class="card-body overflow-scroll">
 
@@ -40,13 +40,13 @@
                <app-rating [rating]="book.rate || 0"></app-rating>
                <span class="fw-bold" *ngIf="book.rate || 0 > 0">{{book.rate}}</span>
             </div>
-            <div class="d-flex gap-2" *ngIf="true">
+            <div class="d-flex gap-2" *ngIf="!manage">
                 <i (click)="onShowDetails()" class="fas fa-circle-info text-primary"></i>
                 <i (click)="onBorrow()" class="fas fa-list-check text-primary"></i>
                 <i (click)="onAddToWatingList()" class="fas fa-heart text-danger"></i>
             </div>
 
-            <div class="d-flex gap-2" *ngIf="false">
+            <div class="d-flex gap-2" >
                 <i (click)="onEdit()" class="fas fa-edit text-success"></i>
                 <i (click)="onShare()" class="fas fa-share-nodes text-primary"></i>
                 <i (click)="onArchive()" class="fas fa-archive text-danger"></i>

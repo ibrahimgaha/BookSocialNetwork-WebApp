@@ -18,7 +18,6 @@ import com.gaha.book.entities.book.file.FileStorageService;
 import com.gaha.book.entities.exception.OperationNotPermittedException;
 
 import jakarta.persistence.EntityNotFoundException;
-import jakarta.validation.Valid;
 
 @Service
 public class BookService {
@@ -36,7 +35,7 @@ public class BookService {
 	private FileStorageService fileStorageService;
 
 	// save a book
-	public Integer save(@Valid BookRequest request, Authentication connectedUser) {
+	public Integer save(BookRequest request, Authentication connectedUser) {
 		User user = ((User) connectedUser.getPrincipal());
 		Book book = bookMapper.toBook(request);
 		book.setOwner(user);
@@ -197,7 +196,7 @@ public class BookService {
 			throw new OperationNotPermittedException("The requested book can not be borrowed ! ");
 		}
 		User user = ((User) connectedUser.getPrincipal());
-		if (java.util.Objects.equals(book.getOwner().getId(), user.getId())) {
+		if (!java.util.Objects.equals(book.getOwner().getId(), user.getId())) {
 			// throw exception
 			throw new OperationNotPermittedException("You cannot return or borrow your own book");
 		}

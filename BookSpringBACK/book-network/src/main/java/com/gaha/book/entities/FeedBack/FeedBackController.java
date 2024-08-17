@@ -24,7 +24,7 @@ public class FeedBackController {
 
 	private final FeedBackService feedBackService;
 
-	@PostMapping("path")
+	@PostMapping("/path")
 	public ResponseEntity<Integer> saveFeedBack(@Valid @RequestBody FeedBackRequest request,
 			Authentication connectedUser) {
 		return ResponseEntity.ok(feedBackService.save(request, connectedUser));

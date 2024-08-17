@@ -11,7 +11,34 @@ public record BookRequest(Integer id,
 
 		@NotEmpty(message = "102") @NotNull(message = "102") String isbn,
 
-		@NotEmpty(message = "104") @NotNull(message = "104") String synopsis,
+		@NotEmpty(message = "103") @NotNull(message = "103") String synopsis,
 
-		Boolean shareable) {
+		Boolean shareable
+
+) {
+
+	public Integer id() {
+		return id;
+	}
+
+	public String title() {
+		return title;
+	}
+
+	public String authorName() {
+		return authorName;
+	}
+
+	public String isbn() {
+		return isbn;
+	}
+
+	public String synopsis() {
+		return synopsis;
+	}
+
+	public Boolean shareable() {
+		return shareable;
+	}
+
 }

@@ -69,7 +69,7 @@ export class BookService extends BaseService {
   }
 
   /** Path part for operation `saveBook()` */
-  static readonly SaveBookPath = '/books/addBook';
+  static readonly SaveBookPath = '/books';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.

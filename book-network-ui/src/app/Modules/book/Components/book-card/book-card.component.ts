@@ -10,9 +10,9 @@ export class BookCardComponent implements OnInit {
 
   constructor() { }
 
-  public _book : BookResponse ={};
-  public _manage: Boolean = false;  // Explicitly set an initial value
-  public _bookCover : String | undefined ;
+  public _book: BookResponse = {} as BookResponse; 
+    public _manage: boolean = false;  // Explicitly set an initial value
+    public _bookCover: string | undefined;
 
   ngOnInit(): void {
   }
@@ -34,11 +34,11 @@ export class BookCardComponent implements OnInit {
   }
 
 
-  get manage(): Boolean {
+  get manage(): boolean {
     return this._manage;
   }
-
-  set manage(value: Boolean) {
+  @Input() 
+  set manage(value: boolean) {
   console.log('Setting manage to:', value);
   this._manage = value;
 }

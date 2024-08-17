@@ -11,7 +11,7 @@ import Swal from 'sweetalert2'
 export class BookListComponent implements OnInit {
   bookResponse:PageResponseBookResponse = {};
   public page= 0;
-  public size = 1;
+  public size = 4;
   public message = "";
 
   constructor(private bookService : BookService,private router:Router) { }

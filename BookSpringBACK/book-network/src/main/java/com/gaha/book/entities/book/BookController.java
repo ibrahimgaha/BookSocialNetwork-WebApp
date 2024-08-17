@@ -30,7 +30,10 @@ public class BookController {
 	@Autowired
 	private BookService bookService;
 
-	@PostMapping("/addBook")
+	@Autowired
+	private BookMapper bookMapper;
+
+	@PostMapping
 	public ResponseEntity<Integer> saveBook(@Valid @RequestBody BookRequest request, Authentication connectedUser) {
 		return ResponseEntity.ok(bookService.save(request, connectedUser));
 	}

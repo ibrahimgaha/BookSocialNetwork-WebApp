@@ -14,7 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 @Component // Registering this class as a Spring bean
 public class FileUtils {
 
-	public byte[] readFileFromLocation(String fileUrl) {
+	public static byte[] readFileFromLocation(String fileUrl) {
 
 		if (StringUtils.isBlank(fileUrl)) {
 			return null;
